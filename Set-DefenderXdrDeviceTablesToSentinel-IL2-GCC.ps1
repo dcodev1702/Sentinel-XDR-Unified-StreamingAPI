@@ -350,6 +350,7 @@ function Get-LogCategoryState {
 function Set-LogCategoryState {
     param(
         [Parameter(Mandatory)]
+        [AllowEmptyCollection()]
         [System.Collections.ArrayList]$Logs,
 
         [Parameter(Mandatory)]
