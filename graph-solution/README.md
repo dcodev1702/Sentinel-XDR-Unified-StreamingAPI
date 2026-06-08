@@ -66,6 +66,7 @@ Dry run first:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel-Graph.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -78,6 +79,7 @@ Enable MDE and MDI exports:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel-Graph.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -122,6 +124,7 @@ The no-Az script supports the same table group switches as the root scripts:
 
 | Switch | Behavior |
 | --- | --- |
+| `-Cloud` | Required cloud selector. Use `Commercial` or `GCC`. |
 | `-EnableMDE` / `-DisableMDE` | Enables or disables Defender for Endpoint Device categories. |
 | `-EnableMDI` / `-DisableMDI` | Enables or disables API-writable Cloud Apps and Identity categories. |
 | `-EnableMDO` / `-DisableMDO` | `-EnableMDO` is reported but not forced because the API rejects those categories. `-DisableMDO` clears known portal-only MDO categories through an API-safe replacement post. |

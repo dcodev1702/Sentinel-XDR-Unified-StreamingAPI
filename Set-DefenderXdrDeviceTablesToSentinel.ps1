@@ -4,7 +4,7 @@ Configures Microsoft Defender XDR Streaming API exports to Microsoft Sentinel.
 
 .DESCRIPTION
 Creates, updates, or deletes an independent Microsoft Defender XDR Streaming API entry that streams selected advanced
-hunting categories into a Microsoft Sentinel Log Analytics workspace. Use -Cloud to choose Commercial or GCC Defender
+hunting categories into a Microsoft Sentinel Log Analytics workspace. Use the required -Cloud parameter to choose Commercial or GCC Defender
 endpoints. The script uses Az PowerShell for Azure context, Azure Resource Manager access, and token acquisition, then
 calls the selected Defender XDR Streaming API endpoint for the export setting.
 
@@ -22,7 +22,7 @@ Resource group that contains the Log Analytics workspace.
 Name of the Log Analytics workspace.
 
 .PARAMETER Cloud
-Defender XDR cloud endpoint to use. Commercial targets api.security.microsoft.com. GCC targets api-gcc.securitycenter.microsoft.us.
+Required Defender XDR cloud endpoint. Commercial targets api.security.microsoft.com. GCC targets api-gcc.securitycenter.microsoft.us.
 GCC High and DoD are not covered by this script.
 
 .PARAMETER ExportSettingId
@@ -66,6 +66,7 @@ Registers missing Azure resource providers before continuing.
 
 .EXAMPLE
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+    -Cloud Commercial `
     -SubscriptionId "00000000-0000-0000-0000-000000000000" `
     -ResourceGroupName "rg-sentinel" `
     -WorkspaceName "law-sentinel" `
@@ -84,6 +85,7 @@ Registers missing Azure resource providers before continuing.
 
 .EXAMPLE
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+    -Cloud Commercial `
     -SubscriptionId "00000000-0000-0000-0000-000000000000" `
     -ResourceGroupName "rg-sentinel" `
     -WorkspaceName "law-sentinel" `
@@ -105,9 +107,9 @@ param(
     [Parameter(Mandatory)]
     [string]$WorkspaceName,
 
-    [Parameter()]
+    [Parameter(Mandatory)]
     [ValidateSet("Commercial", "GCC")]
-    [string]$Cloud = "Commercial",
+    [string]$Cloud,
 
     [Parameter()]
     [string]$ExportSettingId,

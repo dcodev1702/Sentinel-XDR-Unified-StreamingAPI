@@ -20,6 +20,7 @@ If a customer cannot install Az PowerShell, use the no-Az variant in `graph-solu
 ```powershell
 cd .\graph-solution
 .\Set-DefenderXdrDeviceTablesToSentinel-Graph.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -181,6 +182,7 @@ Dry run first:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -195,6 +197,7 @@ Enable MDE and MDI table exports on the selected independent entry:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -207,6 +210,7 @@ Disable MDE, MDI, and MDO-managed categories again:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -220,6 +224,7 @@ Delete the selected independent entry:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -277,7 +282,7 @@ That Azure cloud choice is separate from the Defender API endpoint selected by `
 | `-SubscriptionId` | Azure subscription that contains the Log Analytics workspace. |
 | `-ResourceGroupName` | Resource group containing the workspace. |
 | `-WorkspaceName` | Log Analytics workspace name. |
-| `-Cloud` | Defender XDR cloud endpoint. Use `Commercial` for public commercial tenants or `GCC` for Microsoft 365 GCC / IL2. Defaults to `Commercial`. |
+| `-Cloud` | Required Defender XDR cloud endpoint. Use `Commercial` for public commercial tenants or `GCC` for Microsoft 365 GCC / IL2. |
 | `-TenantId` | Optional guardrail. If omitted, the active Az tenant is used. |
 | `-ExportSettingId` | Optional non-interactive selection of an existing Streaming API entry. The entry must be mapped to the target workspace. If omitted, the script lists entries and prompts for a selection. |
 | `-NewExportSettingId` | Proposed independent entry name to create or reuse. Defaults to `SentinelExportSettings-{WorkspaceName}-Managed`. |
@@ -401,6 +406,7 @@ To turn script-managed categories off without deleting the entry:
 
 ```powershell
 .\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud Commercial `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `

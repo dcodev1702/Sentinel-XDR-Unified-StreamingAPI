@@ -21,7 +21,7 @@ Resource group that contains the Log Analytics workspace.
 Name of the Log Analytics workspace.
 
 .PARAMETER Cloud
-Defender XDR cloud endpoint to use. Commercial targets api.security.microsoft.com. GCC targets api-gcc.securitycenter.microsoft.us.
+Required Defender XDR cloud endpoint. Commercial targets api.security.microsoft.com. GCC targets api-gcc.securitycenter.microsoft.us.
 GCC High and DoD are not covered by this script.
 
 .PARAMETER AzureEnvironment
@@ -72,6 +72,7 @@ Registers missing Azure resource providers through ARM REST before continuing.
 
 .EXAMPLE
 .\Set-DefenderXdrDeviceTablesToSentinel-Graph.ps1 `
+    -Cloud Commercial `
   -SubscriptionId "00000000-0000-0000-0000-000000000000" `
   -ResourceGroupName "rg-sentinel" `
   -WorkspaceName "law-sentinel" `
@@ -102,9 +103,9 @@ param(
     [Parameter(Mandatory)]
     [string]$WorkspaceName,
 
-    [Parameter()]
+    [Parameter(Mandatory)]
     [ValidateSet("Commercial", "GCC")]
-    [string]$Cloud = "Commercial",
+    [string]$Cloud,
 
     [Parameter()]
     [ValidateSet("AzureCloud", "AzureUSGovernment")]
