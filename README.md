@@ -4,21 +4,38 @@ PowerShell tooling for creating and managing an independent Microsoft Defender X
 
 The scripts only change table groups when you request them with explicit flags. They can enable or disable the Defender for Endpoint Device table set, the API-writable Cloud Apps and Identity categories that Defender accepts through `POST /api/dataExportSettings`, and can clear portal-only Microsoft Defender for Office categories on disable. They intentionally do not force Alert tables.
 
-Use the script that matches the tenant cloud:
+Use the single Az script and choose the tenant cloud with `-Cloud`:
 
-| Environment | Script | Defender API endpoint |
-| --- | --- | --- |
-| Commercial | `Set-DefenderXdrDeviceTablesToSentinel-Commercial.ps1` | `https://api.security.microsoft.com` |
-| IL2 / GCC | `Set-DefenderXdrDeviceTablesToSentinel-IL2-GCC.ps1` | `https://api-gcc.securitycenter.microsoft.us` |
+| Environment | Script | Cloud value | Defender API endpoint |
+| --- | --- | --- | --- |
+| Commercial | `Set-DefenderXdrDeviceTablesToSentinel.ps1` | `Commercial` | `https://api.security.microsoft.com` |
+| IL2 / GCC | `Set-DefenderXdrDeviceTablesToSentinel.ps1` | `GCC` | `https://api-gcc.securitycenter.microsoft.us` |
 
-The IL2/GCC script is for Microsoft 365 GCC. It is not the GCC High or DoD script. GCC High and DoD use different endpoints and should get their own variant.
+The `-Cloud GCC` option is for Microsoft 365 GCC / IL2. It is not for GCC High or DoD. GCC High and DoD use different endpoints and should get their own variant.
+
+## No-Az / Graph-Friendly Option
+
+If a customer cannot install Az PowerShell, use the no-Az variant in `graph-solution/`:
+
+```powershell
+cd .\graph-solution
+.\Set-DefenderXdrDeviceTablesToSentinel-Graph.ps1 `
+  -SubscriptionId "<subscription-id>" `
+  -ResourceGroupName "<resource-group>" `
+  -WorkspaceName "<workspace-name>" `
+  -EnableMDE `
+  -EnableMDI `
+  -WhatIf
+```
+
+That script does not use Az cmdlets. It still is not a Microsoft Graph-only implementation: Graph is used for the Entra role check, Azure Resource Manager REST is used for workspace and Sentinel connector validation, and the Defender XDR Streaming API is used for `dataExportSettings`. See `graph-solution/README.md` for the exact token audiences, scopes, and permissions.
 
 ## Before You Start
 
 You need:
 
 - Windows PowerShell 5.1 or PowerShell 7+.
-- The Az PowerShell module.
+- The Az PowerShell module for the root scripts, or the no-Az script in `graph-solution/` when Az cannot be installed.
 - A Microsoft Defender XDR-eligible license in the target tenant.
 - A Microsoft Sentinel-enabled Log Analytics workspace in the same tenant.
 - An interactive user sign-in. The Defender Streaming API endpoint rejects application and service-principal tokens for this workflow.
@@ -163,7 +180,7 @@ Set-AzContext -SubscriptionId "<subscription-id>"
 Dry run first:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-Commercial.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -177,7 +194,7 @@ The `-WhatIf` preview prints the current Streaming API entries, the proposed ind
 Enable MDE and MDI table exports on the selected independent entry:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-Commercial.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -189,7 +206,7 @@ Enable MDE and MDI table exports on the selected independent entry:
 Disable MDE, MDI, and MDO-managed categories again:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-Commercial.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -202,7 +219,7 @@ Disable MDE, MDI, and MDO-managed categories again:
 Delete the selected independent entry:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-Commercial.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -212,7 +229,7 @@ Delete the selected independent entry:
 
 ## IL2 / GCC Usage
 
-For Microsoft 365 GCC / IL2, use the GCC script:
+For Microsoft 365 GCC / IL2, use the same script with `-Cloud GCC`:
 
 ```powershell
 Connect-AzAccount
@@ -222,7 +239,8 @@ Set-AzContext -SubscriptionId "<subscription-id>"
 Dry run first:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-IL2-GCC.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud GCC `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -234,7 +252,8 @@ Dry run first:
 Enable MDE and MDI table exports:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-IL2-GCC.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud GCC `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
@@ -249,7 +268,7 @@ If your Azure resources are in Azure Government rather than public Azure, sign i
 Connect-AzAccount -Environment AzureUSGovernment
 ```
 
-That Azure cloud choice is separate from the Defender API endpoint baked into the IL2/GCC script.
+That Azure cloud choice is separate from the Defender API endpoint selected by `-Cloud GCC`.
 
 ## Useful Parameters
 
@@ -258,6 +277,7 @@ That Azure cloud choice is separate from the Defender API endpoint baked into th
 | `-SubscriptionId` | Azure subscription that contains the Log Analytics workspace. |
 | `-ResourceGroupName` | Resource group containing the workspace. |
 | `-WorkspaceName` | Log Analytics workspace name. |
+| `-Cloud` | Defender XDR cloud endpoint. Use `Commercial` for public commercial tenants or `GCC` for Microsoft 365 GCC / IL2. Defaults to `Commercial`. |
 | `-TenantId` | Optional guardrail. If omitted, the active Az tenant is used. |
 | `-ExportSettingId` | Optional non-interactive selection of an existing Streaming API entry. The entry must be mapped to the target workspace. If omitted, the script lists entries and prompts for a selection. |
 | `-NewExportSettingId` | Proposed independent entry name to create or reuse. Defaults to `SentinelExportSettings-{WorkspaceName}-Managed`. |
@@ -380,7 +400,7 @@ The scripts also include a bounded retry that removes any additional unsupported
 To turn script-managed categories off without deleting the entry:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-Commercial.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `

@@ -197,7 +197,8 @@ If the portal remains ambiguous, validate the permission boundary with the scrip
 For IL2 / GCC:
 
 ```powershell
-.\Set-DefenderXdrDeviceTablesToSentinel-IL2-GCC.ps1 `
+.\Set-DefenderXdrDeviceTablesToSentinel.ps1 `
+  -Cloud GCC `
   -SubscriptionId "<subscription-id>" `
   -ResourceGroupName "<resource-group>" `
   -WorkspaceName "<workspace-name>" `
