@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 640" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowMagenta" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#080c16"/>
+    </linearGradient>
+    <linearGradient id="nodeCyan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0e2233"/>
+      <stop offset="100%" stop-color="#0a1622"/>
+    </linearGradient>
+    <linearGradient id="nodeMagenta" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a1230"/>
+      <stop offset="100%" stop-color="#190a1f"/>
+    </linearGradient>
+    <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrowMagenta" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#e879f9"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1180" height="640" rx="14" fill="url(#bgGrad)"/>
+  <rect x="1" y="1" width="1178" height="638" rx="13" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="590" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#e2e8f0" letter-spacing="1">Sentinel &#8596; ServiceNow Integration Architecture</text>
+  <line x1="430" y1="62" x2="750" y2="62" stroke="#334155" stroke-width="1"/>
+
+  <!-- Column divider -->
+  <line x1="590" y1="90" x2="590" y2="600" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 6"/>
+
+  <!-- ======== LEFT COLUMN : PRIMARY FLOW ======== -->
+  <text x="300" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#22d3ee" letter-spacing="2" filter="url(#glowCyan)">PRIMARY FLOW &#183; SENTINEL &#8594; SERVICENOW</text>
+
+  <!-- Node 1 -->
+  <rect x="80" y="128" width="440" height="62" rx="10" fill="url(#nodeCyan)" stroke="#22d3ee" stroke-width="2" filter="url(#glowCyan)"/>
+  <text x="300" y="166" text-anchor="middle" font-size="17" font-weight="600" fill="#cffafe">Microsoft Sentinel incident</text>
+
+  <!-- Arrow 1 -->
+  <line x1="300" y1="190" x2="300" y2="268" stroke="#22d3ee" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowCyan)"/>
+  <text x="316" y="226" font-size="12.5" font-style="italic" fill="#7dd3fc">Automation rule:</text>
+  <text x="316" y="243" font-size="12.5" font-style="italic" fill="#7dd3fc">incident created or updated</text>
+
+  <!-- Node 2 -->
+  <rect x="80" y="272" width="440" height="62" rx="10" fill="url(#nodeCyan)" stroke="#22d3ee" stroke-width="2" filter="url(#glowCyan)"/>
+  <text x="300" y="310" text-anchor="middle" font-size="17" font-weight="600" fill="#cffafe">Azure Logic Apps playbook</text>
+
+  <!-- Arrow 2 -->
+  <line x1="300" y1="334" x2="300" y2="446" stroke="#22d3ee" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowCyan)"/>
+  <text x="316" y="374" font-size="12.5" font-style="italic" fill="#7dd3fc">Sentinel connector &#183; managed identity</text>
+  <text x="316" y="392" font-size="12.5" font-style="italic" fill="#7dd3fc">ServiceNow connector or HTTP action</text>
+  <text x="316" y="410" font-size="12.5" font-style="italic" fill="#7dd3fc">&#183; OAuth / basic auth</text>
+
+  <!-- Node 3 -->
+  <rect x="80" y="450" width="440" height="80" rx="10" fill="url(#nodeCyan)" stroke="#22d3ee" stroke-width="2" filter="url(#glowCyan)"/>
+  <text x="300" y="484" text-anchor="middle" font-size="17" font-weight="600" fill="#cffafe">ServiceNow incident, security incident,</text>
+  <text x="300" y="508" text-anchor="middle" font-size="17" font-weight="600" fill="#cffafe">or event record</text>
+
+  <!-- ======== RIGHT COLUMN : REVERSE PATH ======== -->
+  <text x="880" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#e879f9" letter-spacing="2" filter="url(#glowMagenta)">OPTIONAL REVERSE PATH &#183; SERVICENOW &#8594; SENTINEL</text>
+
+  <!-- Node 1 -->
+  <rect x="660" y="128" width="440" height="80" rx="10" fill="url(#nodeMagenta)" stroke="#e879f9" stroke-width="2" filter="url(#glowMagenta)"/>
+  <text x="880" y="162" text-anchor="middle" font-size="17" font-weight="600" fill="#fae8ff">ServiceNow records changed</text>
+  <text x="880" y="186" text-anchor="middle" font-size="17" font-weight="600" fill="#fae8ff">since last watermark</text>
+
+  <!-- Arrow 1 -->
+  <line x1="880" y1="208" x2="880" y2="306" stroke="#e879f9" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowMagenta)"/>
+  <text x="896" y="248" font-size="12.5" font-style="italic" fill="#f0abfc">Logic App, Azure Function,</text>
+  <text x="896" y="266" font-size="12.5" font-style="italic" fill="#f0abfc">or ServiceNow outbound REST</text>
+
+  <!-- Node 2 -->
+  <rect x="660" y="310" width="440" height="80" rx="10" fill="url(#nodeMagenta)" stroke="#e879f9" stroke-width="2" filter="url(#glowMagenta)"/>
+  <text x="880" y="344" text-anchor="middle" font-size="17" font-weight="600" fill="#fae8ff">Azure Monitor Logs Ingestion API</text>
+  <text x="880" y="368" text-anchor="middle" font-size="17" font-weight="600" fill="#fae8ff">or Sentinel Incidents REST API</text>
+
+  <!-- Arrow 2 -->
+  <line x1="880" y1="390" x2="880" y2="446" stroke="#e879f9" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowMagenta)"/>
+
+  <!-- Node 3 -->
+  <rect x="660" y="450" width="440" height="80" rx="10" fill="url(#nodeMagenta)" stroke="#e879f9" stroke-width="2" filter="url(#glowMagenta)"/>
+  <text x="880" y="484" text-anchor="middle" font-size="17" font-weight="600" fill="#fae8ff">Custom Sentinel table</text>
+  <text x="880" y="508" text-anchor="middle" font-size="17" font-weight="600" fill="#fae8ff">or updated Sentinel incident</text>
+
+  <!-- Footer -->
+  <text x="300" y="586" text-anchor="middle" font-size="12" fill="#64748b">Ticketing &#183; required for SOC workflows</text>
+  <text x="880" y="586" text-anchor="middle" font-size="12" fill="#64748b">Ingestion / state sync &#183; build after primary flow is stable</text>
+</svg>
